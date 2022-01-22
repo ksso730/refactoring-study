@@ -1,4 +1,5 @@
 import {createRequire} from "module";
+import { format } from "path";
 
 const require = createRequire(import.meta.url);
 const invoicesData = require("./data/invoices.json");
@@ -7,7 +8,20 @@ const playData = require("./data/play.json");
 const invoices = JSON.parse(JSON.stringify(invoicesData));
 const plays = JSON.parse(JSON.stringify(playData));
 
+const totalVolumeCredits = (invoice) => {
+    let volumeCredits = 0;
+    for (let perf of invoice.performances) {
+        //포인트 적립
+        volumeCredits += volumeCreditsFor(perf);
+    }
+    return volumeCredits;
+}
 
+const usd = (aNumber) => {
+    return new Intl.NumberFormat("en-US", 
+                        { style: "currency", currency: "USD",
+                        minimumFractionDigits: 2}).format(aNumber/100);
+}
 
 const volumeCreditsFor = (perf) => {
     let result = 0;
@@ -48,28 +62,16 @@ const amountFor = (aPerformance) => {
 
 const statement = (invoice) => {
     let totalAmaount = 0;
-    let volumeCredits = 0;
     let result = `=== 청구내역 (${invoice.customer})\n`;
     
-    const format = new Intl.NumberFormat
-                            ("en-US", 
-                            { style: "currency", currency: "USD",
-                            minimumFractionDigits: 2}).format;
-    
     for (let perf of invoice.performances) {
-        // const play = plays[perf.playID];
-        let thisAmount = amountFor(perf);
-        
-        //포인트 적립
-        volumeCredits += volumeCreditsFor(perf);
-
         // 청구내역 출력
-        result += `\t${playFor(perf).name}: ${format(thisAmount/100)} (${perf.audience}석)\n`;
-        totalAmaount += thisAmount;
+        result += `\t${playFor(perf).name}: ${usd(amountFor(perf))} (${perf.audience}석)\n`;
+        totalAmaount += amountFor(perf);
     }                              
     
-    result += `총액: ${format(totalAmaount/100)}\n`;
-    result += `적립포인트: ${volumeCredits}점\n`;
+    result += `총액: ${usd(totalAmaount)}\n`;
+    result += `적립포인트: ${totalVolumeCredits(invoice)}점\n`;
     return result;
 }
 
