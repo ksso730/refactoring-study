@@ -1,0 +1,31 @@
+{
+  "name": "study-refactoring-2nd",
+  "version": "1.0.0",
+  "description": "마틴 파울러의 리팩터링 2판 스터디 저장소입니다",
+  "scripts": {
+    "test": "mocha -r babel-core/register",
+    "test:de1": "npm run test -- chapter1/이동은/*.spec.js",
+    "test:korany-chapter1": "npm run test -- chapter1/이고은/statement.spec.js",
+    "test:power3xz-chapter1": "npm run test -- chapter1/정철훈/statement.spec.js",
+    "test:leesoo-4": "npm run test -- chapter4/이수연/*.spec.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lawcompany/study-refactoring-2nd.git"
+  },
+  "author": "lawcompany-devteam",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lawcompany/study-refactoring-2nd/issues"
+  },
+  "homepage": "https://github.com/lawcompany/study-refactoring-2nd#readme",
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "mocha": "^9.1.4"
+  },
+  "type": "module",
+  "dependencies": {
+    "babel-preset-es2015": "^6.24.1",
+    "babel-register": "^6.26.0"
+  }
+}
